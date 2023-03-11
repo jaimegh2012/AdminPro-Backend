@@ -34,20 +34,73 @@ const crearHospital = async(req = request, res = response) => {
     }
 }
 
-const actualizarHospital = (req = request, res = response) => {
+const actualizarHospital = async(req = request, res = response) => {
 
-    res.json({
-        ok: true,
-        msg: 'actualizar Hospitales'
-    })
+    try {
+        
+        const id = req.params.id;
+        const uid = req.uid;
+
+        const hospitalDb = await Hospital.findById(id);
+
+        if (!hospitalDb) {
+            res.status(404).json({
+                ok: false,
+                msg: 'Hospital no encontrado'
+            })
+        }
+
+        const cambiosHospital = {
+            ...req.body,
+            usuario: uid
+        };
+
+        //new es para que regrese el ultimo documento actualizado
+        const hospitalActualizado = await Hospital.findByIdAndUpdate(id, cambiosHospital, {new: true})
+
+        res.json({
+            ok: true,
+            msg: 'actualizar Hospitales',
+            uid,
+            hospital: hospitalActualizado
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Algo salio mal, hable con el admin'
+        })
+    }
 }
 
-const borrarHospital = (req = request, res = response) => {
+const borrarHospital = async(req = request, res = response) => {
 
-    res.json({
-        ok: true,
-        msg: 'borrar Hospitales'
-    })
+    try {
+        
+        const id = req.params.id;
+
+        const hospitalDb = await Hospital.findById(id);
+
+        if (!hospitalDb) {
+            res.status(404).json({
+                ok: false,
+                msg: 'Hospital no encontrado'
+            })
+        }
+
+        await Hospital.findByIdAndDelete(id);
+
+        res.json({
+            ok: true,
+            msg: 'Hospital eliminado',
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok: false,
+            msg: 'Algo salio mal, hable con el admin'
+        })
+    }
 }
 
 
