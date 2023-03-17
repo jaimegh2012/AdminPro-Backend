@@ -60,7 +60,6 @@ const postUsuarios = async(req = request, res = response) => {
             token
         })
     } catch (error) {
-
         res.status(400).json({
             ok: false,
             msg: 'ha ocurrido un error'
