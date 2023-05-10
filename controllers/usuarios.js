@@ -112,7 +112,7 @@ const putUsuarios = async(req = request, res = response) => {
             usuarioActualizado
         })
     } catch (error) {
-
+        console.log(error);
         res.status(400).json({
             ok: false,
             msg: 'ha ocurrido un error'
@@ -145,7 +145,7 @@ const borrarUsuario = async(req = request, res = response) => {
         });
         
     } catch (error) {
-        res.status(500).json({
+        res.status(400).json({
             ok: false,
             msg: 'Ha ocurrido un error'
         });
